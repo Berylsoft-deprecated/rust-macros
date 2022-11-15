@@ -1,20 +1,20 @@
 #[macro_export]
 macro_rules! bin_struct {
     {
-        #[derive($($derives:tt)*)]
-        pub struct $name:ident {
-            $(pub $field:ident: $numtype:ty,)*
+        $(#[$meta:meta])*
+        $pub:vis struct $name:ident {
+            $($field_pub:vis $field:ident: $numtype:ty,)*
         }
     } => {
-        #[derive($($derives)*)]
-        pub struct $name {
-            $(pub $field: $numtype,)*
+        $(#[$meta])*
+        $pub struct $name {
+            $($field_pub $field: $numtype,)*
         }
-        
-        impl $name {
-            pub const SIZE: usize = std::mem::size_of::<Self>();
 
-            pub fn from_bytes(raw: [u8; Self::SIZE]) -> Self {
+        impl $name {
+            $pub const SIZE: usize = { $(std::mem::size_of::<$numtype>()+)* 0 };
+
+            $pub fn from_bytes(raw: [u8; Self::SIZE]) -> Self {
                 let mut offset: usize = 0;
                 $(
                     let _size: usize = std::mem::size_of::<$numtype>();
@@ -25,7 +25,7 @@ macro_rules! bin_struct {
                 Self { $($field,)* }
             }
 
-            pub fn to_bytes(&self) -> [u8; Self::SIZE] {
+            $pub fn to_bytes(&self) -> [u8; Self::SIZE] {
                 let mut buf = [0u8; Self::SIZE];
                 let mut offset: usize = 0;
                 $(
