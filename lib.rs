@@ -5,7 +5,7 @@
 macro_rules! error_enum {
     {
         $(#[$meta:meta])*
-        $pub:vis $name:ident {
+        $pub:vis enum $name:ident {
             $($extra:tt)*
         }
         convert {
