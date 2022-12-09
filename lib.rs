@@ -156,16 +156,16 @@ macro_rules! bin_struct_complex_impl {
 #[macro_export]
 macro_rules! error_enum {
     {
-        #[derive($($derives:tt)*)]
-        $name:ident {
+        $(#[$meta:meta])*
+        $pub:vis $name:ident {
             $($extra:tt)*
         }
         convert {
-            $($variant:ident => $error:ty),*,
+            $($variant:ident => $error:ty,)*
         }
     } => {
-        #[derive($($derives)*)]
-        pub enum $name {
+        $(#[$meta])*
+        $pub enum $name {
             $($variant($error),)*
             $($extra)*
         }
